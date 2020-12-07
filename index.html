@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grab a Meal!</title>
+    <link rel="stylesheet" href="<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.css" integrity="sha512-5fsy+3xG8N/1PV5MIJz9ZsWpkltijBI48gBzQ/Z2eVATePGHOkMIn+xTDHIfTZFVb9GMpflF2wOWItqxAP2oLQ==" crossorigin="anonymous" />
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <h2>Feeling Hungry?</h2>
+  <h3>Get a random meal by clicking below</h3>
+        
+            <button type="button" id="getMeal" class="btn" >Grab a Random Meal!</button>
+            <div id="meal" class="meal">
+        
+            </div>
+       
+ 
+    
+</body>
+<script>
+    const getMealbtn=document.getElementById("getMeal");
+    
+    const mealcontainer=document.getElementById("meal");
+    getMealbtn.addEventListener("click",() => {
+        const url='https://www.themealdb.com/api/json/v1/1/random.php';
+        fetch(url)
+        .then(res => {return res.json()})
+        .then(res => {
+           
+            createMeal(res.meals[0]);
+    }); });
+
+
+    const createMeal = meal =>{
+        var ingredients=[];
+       for(let i=1;i<21;i++){
+            if (meal[`strIngredient${i}`]) {
+            ingredients.push(
+                `${meal[`strIngredient${i}`]} - ${meal[`strMeasure${i}`]}`
+            );}}
+            
+ const randomMeal={
+     name:meal.strMeal,
+     instructions:meal.strInstructions,
+     category:meal.strCategory,
+     mealImg:meal.strMealThumb,
+     recipe:meal.strYoutube,
+     area:meal.strArea,
+     tags:meal.strTags
+
+     }
+const display=`<div><img src=${randomMeal.mealImg}><br>
+<b>Area : </b>${randomMeal.area} <br>
+<b>Category : </b>${randomMeal.category}<br>
+<b>Tags : </b>${randomMeal.tags}<br>
+    <h4>Ingredients:</h4> <ul>${ingredients.map(x => `<li>${x}</li>`).join('')}</ul></div>
+   <div> <h3>${randomMeal.name}</h3>
+    <p>${randomMeal.instructions}</p><div>
+   <h5>Recipe</h5><div class="videoWrapper">
+        <iframe width="420" height="315" src="https://www.youtube.com/embed/${randomMeal.recipe.slice(-11)}">
+</iframe></div>
+    ` ;
+mealcontainer.innerHTML=display;
+    }
+</script>
+</html>
